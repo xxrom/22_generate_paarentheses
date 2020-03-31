@@ -3,32 +3,29 @@ from typing import List
 
 class Solution:
 
-  def generate(self, currentPath: str, open: str, close: str,
+  def generate(self, currentPath: str, open: int, close: int,
                ans: List[str]) -> List[str]:
-    if len(open) == 0 and len(close) == 0:
+    if open == 0 and close == 0:
       return ans + [str(currentPath)]
 
-    ans1 = []
-    ans2 = []
-    if len(open) >= len(close):
-      ans1 = self.generate(currentPath + '(', open[1:], close[:], ans)
-    if len(open) < len(close):
-      if len(open) > 0:
-        ans1 = self.generate(currentPath + '(', open[1:], close[:], ans)
-      if len(close) > 0:
-        ans2 = self.generate(currentPath + ')', open[:], close[1:], ans)
+    ans1, ans2 = [], []
+    if open >= close:
+      ans1 = self.generate(currentPath + '(', open - 1, close, ans)
+    else:  #if open < close:
+      if open > 0:
+        ans1 = self.generate(currentPath + '(', open - 1, close, ans)
+      if close > 0:
+        ans2 = self.generate(currentPath + ')', open, close - 1, ans)
 
     return ans1 + ans2
 
   def generateParenthesis(self, n: int) -> List[str]:
-    open = '(' * n
-    close = ')' * n
 
-    return self.generate('', open, close, [])
+    return self.generate('', n, n, [])
 
 
 my = Solution()
-n = 7
+n = 3
 ans = my.generateParenthesis(n)
 print("ans", ans)
 
